@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/margin_alarm_20dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="추가 / 수정"
+            android:textColor="@color/titleBarText"
+            android:textSize="@dimen/text_size_title_bar_20sp"
+            android:layout_margin="@dimen/margin_text_title_bar"/>
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="완료"
+            android:textColor="@color/titleBarText"
+            android:textSize="@dimen/text_size_title_bar_15sp"/>
+    </FrameLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="@dimen/text_size_alarm_time_50sp"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="반복 - "
+            android:textSize="@dimen/text_size_alarm_25sp"
+            android:textColor="@color/alarmText"/>
+
+        <TextView
+            android:id="@+id/tv_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="월, 화, 수"
+            android:textSize="@dimen/text_size_alarm_25sp"
+            android:textColor="@color/alarmText"/>
+    </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:text="제목 "
+                android:textSize="@dimen/text_size_alarm_message_15sp"
+                android:textColor="@color/alarmText"/>
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="알람"
+                android:textSize="@dimen/text_size_alarm_message_15sp"
+                android:textColor="@color/alarmText"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:text="메시지 "
+                android:textSize="@dimen/text_size_alarm_message_15sp"
+                android:textColor="@color/alarmText"/>
+
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="예) OOO님 약 드실 시간입니다."
+                android:textSize="@dimen/text_size_alarm_message_15sp"
+                android:textColor="@color/alarmText"/>
+        </TableRow>
+
+        <TableRow>
+            <CheckBox
+                android:id="@+id/cb_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:text="응답 "
+                android:textSize="@dimen/text_size_alarm_message_15sp"
+                android:textColor="@color/alarmText"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/et_response"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="예) OOO님 약 드셨나요?"
+                    android:textSize="@dimen/text_size_alarm_message_15sp"
+                    android:textColor="@color/alarmText"/>
+
+                <EditText
+                    android:id="@+id/et_response_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_alarm_message_15sp"
+                    android:textColor="@color/alarmText"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="분 후"
+                    android:textSize="@dimen/text_size_alarm_message_15sp"
+                    android:textColor="@color/alarmText"/>
+            </LinearLayout>
+
+
+        </TableRow>
+    </TableLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+
+    <dimen name="text_size_title_bar_20sp">20sp</dimen>
+    <dimen name="text_size_title_bar_15sp">15sp</dimen>
+    <dimen name="margin_text_title_bar">10dp</dimen>
+    <dimen name="size_split_line_1dp">1dp</dimen>
+    <dimen name="margin_split_line_5dp">5dp</dimen>
+
+    <dimen name="text_size_item_time_30sp">30sp</dimen>
+    <dimen name="text_size_item_15sp">15sp</dimen>
+    <dimen name="padding_item_10dp">10dp</dimen>
+
+    <dimen name="text_size_alarm_time_50sp">50sp</dimen>
+    <dimen name="text_size_alarm_25sp">25sp</dimen>
+    <dimen name="text_size_alarm_message_15sp">15sp</dimen>
+    <dimen name="margin_alarm_20dp">20dp</dimen>
+</resources>
