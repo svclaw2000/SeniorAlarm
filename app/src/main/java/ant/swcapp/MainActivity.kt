@@ -1,6 +1,8 @@
 package ant.swcapp
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,13 +17,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 import android.os.Handler
 import android.os.Message
 import ant.swcapp.data.Alarm
+import ant.swcapp.data.Response
+import ant.swcapp.utils.MyLogger
 import ant.swcapp.utils.SDF
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
@@ -34,15 +37,16 @@ private const val PROCESS_LOG = "PROCESS LOG"
 
 
 class MainActivity : AppCompatActivity() {
-    var alarmThread: Thread? = null
-    var responseThread: Thread? = null
     var curResponseAlarm : Alarm? = null
+    lateinit var alarmManager : AlarmManager
 
     companion object {
         // requestPermission() 에 사용되어 callBack 함수인 onRequestPermission() 에서
         // 어떤 권한에 대한 onRequestPermission 인지 식별하기 위한 식별자인데
         // onRequestPermission 을 사용안해서 큰 의미는 없는 상수입니다
         const val REQUEST_RECORD_AUDIO_PERMISSION = 430
+
+        const val TAG = "MainActivity"
 
         // 애니메이션 설정에 사용하는 상수입니다
         const val ANIMATION_IDLE: Int = 1
@@ -51,6 +55,8 @@ class MainActivity : AppCompatActivity() {
         const val ANIMATION_BYE: Int = 4
 
         var activity : MainActivity? = null
+
+        val RESPONSE_LIST = arrayOf("그래", "응", "먹었어", "이미", "벌써")
     }
 
     // SpeechRecognizer 초기화용 인텐트
@@ -58,20 +64,24 @@ class MainActivity : AppCompatActivity() {
 
     // STT 오브젝트 생성
     lateinit var mRecognizer: SpeechRecognizer
-
     var isSpeaking = false
+
+    val tempCalendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         activity = this@MainActivity
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // SpeechRecognizer 설정에 필요한 정보를 담는 인텐트
         _intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         _intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, packageName)
         _intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")
         _intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+        _intent.putExtra("android.speech.extra.GET_AUDIO_FORMAT", "audio/AMR")
+        _intent.putExtra("android.speech.extra.GET_AUDIO", true)
 
         // SpeechRecognizer 초기화
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
@@ -83,6 +93,32 @@ class MainActivity : AppCompatActivity() {
         btn_alarm_list.setOnClickListener {
             val intent = Intent(this@MainActivity, AlarmListActivity::class.java)
             startActivity(intent)
+        }
+
+        when (intent?.getIntExtra(AlarmReceiver.EXTRA_TYPE, -1) ?: return) {
+            AlarmReceiver.RC_ALARM -> {
+                MyLogger.d(TAG, "Alarm Received")
+                val alarm = Alarm.getById(this@MainActivity, intent.getIntExtra(AlarmReceiver.EXTRA_ALARM_ID, -1)) ?: return
+                alarm.startAlarm(this@MainActivity)
+                announcerTextView.text = alarm.message
+                val announcer = announcer as MainActivity.Announcer
+                announcer.apply {
+                    setInterested()
+                    talk(alarm.message)
+                }
+                startAlarm()
+            }
+            AlarmReceiver.RC_RESPONSE -> {
+                MyLogger.d(TAG, "Response Received")
+                val response = Alarm.getById(this@MainActivity, intent.getIntExtra(AlarmReceiver.EXTRA_ALARM_ID, -1)) ?: return
+                announcerTextView.text = response.response
+                val announcer = announcer as MainActivity.Announcer
+                announcer.apply {
+                    setInterested()
+                    talkForResponse(response.response, response)
+                }
+                startResponse()
+            }
         }
     }
 
@@ -275,13 +311,13 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // if(음성 녹음 권한이 없다면)
-        if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.RECORD_AUDIO) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // 권한을 요청합니다
             ActivityCompat.requestPermissions(
                 this@MainActivity,
-                arrayOf(Manifest.permission.RECORD_AUDIO),
+                arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
                 REQUEST_RECORD_AUDIO_PERMISSION
             )
         }
@@ -321,10 +357,21 @@ class MainActivity : AppCompatActivity() {
             val sMsg = mResult!![0]
             sttTextView.text = sMsg // sttTextView 창에 표현
             Log.i("@@@", sMsg)
-            curResponseAlarm?.responseEnd = true
-            curResponseAlarm?.save(this@MainActivity)
-            curResponseAlarm = null
-            startAlarm()
+
+            for (resp in RESPONSE_LIST) {
+                if (sMsg.contains(resp)) {
+                    curResponseAlarm?.responseEnd = true
+                    curResponseAlarm?.save(this@MainActivity)
+                    Response.add(this@MainActivity, curResponseAlarm!!, sMsg)
+                    curResponseAlarm = null
+                    break
+                }
+            }
+
+            if (curResponseAlarm != null && curResponseAlarm!!.isPassedWithNoResponse()) {
+                Response.add(this@MainActivity, curResponseAlarm!!, "null")
+            }
+            startResponse()
 //            val sRetRaw = HttpAsyncTask(this@MainActivity).execute(Utils.POST_DIALOG, getJsonFromString(sMsg)).get()
 //            val sRet = getStringFromResult(sRetRaw)
 //            announcerTextView.text = sRet
@@ -353,6 +400,7 @@ class MainActivity : AppCompatActivity() {
             announcer.apply {
                 setAlarm() // 아나운서 상태 Alarm 으로 변경
             }
+            startResponse()
         }
 
         override fun onBufferReceived(buffer: ByteArray?) {
@@ -389,60 +437,47 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startAlarm() {
-        alarmThread?.interrupt()
-        responseThread?.interrupt()
-        val alarm = Alarm.getNextAlarm(this@MainActivity) ?: return
-        val response = Alarm.getNextResponse(this@MainActivity) ?: return
+        val alarm = Alarm.getNextAlarm(this@MainActivity)
+        val alarmIntent = Intent(this, AlarmReceiver::class.java)
+        alarmIntent.putExtra(AlarmReceiver.EXTRA_TYPE, AlarmReceiver.RC_ALARM)
+        alarmIntent.putExtra(AlarmReceiver.EXTRA_ALARM_ID, alarm?.id)
+        val alarmPendingIntent = PendingIntent.getBroadcast(this, AlarmReceiver.RC_ALARM, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val alarmRunnable = Runnable {
-            try {
-                val curTime = Date().time
-                val timeLeft = (alarm.getNextAlarmTime() ?: return@Runnable) - curTime
-                Log.i("Alarm", "Alarm left time: ${timeLeft}, Alarm time: ${SDF.dateTimeBar.format(Date(curTime + timeLeft))}")
-                Thread.sleep(timeLeft)
-                runOnUiThread {
-                    alarm.startAlarm(this@MainActivity)
-                    announcerTextView.text = alarm.message
-                    val announcer = announcer as Announcer
-                    announcer.apply {
-                        setInterested() // 아나운서 상태 Interested 로 변경
-                        talk(alarm.message)
-                    }
-                }
-                startAlarm()
-            } catch (e: Exception) {
-                Log.i("Alarm", "Alarm interrupted.")
-            }
+        if (alarm == null) {
+            alarmManager.cancel(alarmPendingIntent)
+            tv_next_alarm.text = null
+        } else {
+            val alarmTriggerTime = alarm.getNextAlarmTime() ?: return
+            tempCalendar.timeInMillis = alarmTriggerTime
+            tv_next_alarm.text = String.format(getString(R.string.next_fmt), tempCalendar[Calendar.HOUR_OF_DAY], tempCalendar[Calendar.MINUTE], alarm.message)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTriggerTime, alarmPendingIntent)
+            MyLogger.d("@Alarm@", "${alarmTriggerTime - Date().time}")
         }
+    }
 
-        val responseRunnable = Runnable {
-            try {
-                val curTime = Date().time
-                val timeLeft = (response.getNextResponseTime() ?: return@Runnable) - curTime
-                Log.i("Alarm", "Response left time: ${timeLeft}, Response time: ${SDF.dateTimeBar.format(Date(curTime + timeLeft))}")
-                Thread.sleep(timeLeft)
-                runOnUiThread {
-                    announcerTextView.text = response.response
-                    val announcer = announcer as Announcer
-                    announcer.apply {
-                        setInterested() // 아나운서 상태 Interested 로 변경
-                        talkForResponse(response.response, response)
-                    }
-                }
-            } catch (e: Exception) {
-                Log.i("Alarm", "Response interrupted.")
-            }
+    fun startResponse() {
+        val response = Alarm.getNextResponse(this@MainActivity)
+        val responseIntent = Intent(this, AlarmReceiver::class.java)
+        responseIntent.putExtra(AlarmReceiver.EXTRA_TYPE, AlarmReceiver.RC_RESPONSE)
+        responseIntent.putExtra(AlarmReceiver.EXTRA_ALARM_ID, response?.id)
+        val responsePendingIntent = PendingIntent.getBroadcast(this, AlarmReceiver.RC_RESPONSE, responseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        if (response == null) {
+            alarmManager.cancel(responsePendingIntent)
+            tv_next_response.text = null
+        } else {
+            val responseTriggerTime = response.getNextResponseTime() ?: return
+            tempCalendar.timeInMillis = responseTriggerTime
+            tv_next_response.text = String.format(getString(R.string.next_fmt), tempCalendar[Calendar.HOUR_OF_DAY], tempCalendar[Calendar.MINUTE], response.response)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, responseTriggerTime, responsePendingIntent)
+            MyLogger.d("@Response@", "${responseTriggerTime - Date().time}")
         }
-
-        alarmThread = Thread(alarmRunnable)
-        alarmThread?.start()
-        responseThread = Thread(responseRunnable)
-        responseThread?.start()
     }
 
     override fun onResume() {
         super.onResume()
         startAlarm()
+        startResponse()
     }
 }
 

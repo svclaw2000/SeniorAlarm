@@ -2,6 +2,7 @@ package ant.swcapp.data
 
 import android.content.Context
 import ant.swcapp.utils.DatabaseHandler
+import ant.swcapp.utils.MyLogger
 import ant.swcapp.utils.SDF
 import com.google.gson.JsonObject
 import java.lang.Exception
@@ -294,7 +295,7 @@ class Alarm(
                 nextCal.add(Calendar.DAY_OF_MONTH, 1)
             }
         } else {
-            while (!repeatArray[nextCal[Calendar.DAY_OF_WEEK] - 1] &&
+            while (!repeatArray[nextCal[Calendar.DAY_OF_WEEK] - 1] ||
                 nextCal.timeInMillis < curTime
             ) {
                 nextCal.add(Calendar.DAY_OF_MONTH, 1)
@@ -303,40 +304,6 @@ class Alarm(
 
         return nextCal.timeInMillis
     }
-
-    /*fun getNextResponseTime(): Long? {
-        if (!isEnabled || !hasResponse) {
-            return null
-        }
-
-        val nextCal = Calendar.getInstance()
-
-        if (lastAlarmDate == null) {
-            nextCal.timeInMillis = getNextAlarmTime() ?: return null
-            nextCal.add(Calendar.MINUTE, responseTime)
-        }
-
-        val curTime = Date().time
-        nextCal.time = lastAlarmDate
-        nextCal.add(Calendar.MINUTE, responseTime)
-
-
-
-        val repeatArray = repeat.getBooleanArray()
-        if (repeatArray.isEmpty()) {
-            if (nextCal.timeInMillis < curTime) {
-                nextCal.add(Calendar.DAY_OF_MONTH, 1)
-            }
-        } else {
-            while (!repeatArray[nextCal[Calendar.DAY_OF_WEEK] - 1] &&
-                nextCal.timeInMillis < curTime
-            ) {
-                nextCal.add(Calendar.DAY_OF_MONTH, 1)
-            }
-        }
-
-        return nextCal.timeInMillis
-    }*/
 
     // Call this function when the alarm ring.
     fun startAlarm(context: Context) {
@@ -370,5 +337,13 @@ class Alarm(
         nextCal.timeInMillis = getNextAlarmTime() ?: return null
         nextCal.add(Calendar.MINUTE, responseTime)
         return nextCal.timeInMillis
+    }
+
+    fun isPassedWithNoResponse() : Boolean {
+        val lastAlarmTime = lastAlarmDate?.time ?: return false
+        if (lastAlarmTime + 60 * 1000 * (responseTime + 5 * 2 - 1) < Date().time) {
+            return true
+        }
+        return false
     }
 }

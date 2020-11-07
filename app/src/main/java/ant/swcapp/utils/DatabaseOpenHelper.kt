@@ -10,6 +10,7 @@ class DatabaseOpenHelper(val context: Context?, name: String?, factory: SQLiteDa
 
     override fun onCreate(db: SQLiteDatabase) {
         createTableAlarm(db)
+        createTableResponse(db)
     }
 
     override fun onOpen(db: SQLiteDatabase) {
@@ -45,6 +46,26 @@ class DatabaseOpenHelper(val context: Context?, name: String?, factory: SQLiteDa
         """.trimIndent()
 
         MyLogger.d("Initialize ALARM_TB", sql)
+
+        try {
+            db.execSQL(sql)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun createTableResponse(db: SQLiteDatabase) {
+        val sql = """
+            CREATE TABLE IF NOT EXISTS RESPONSE_TB (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                datetime TEXT NOT NULL,
+                alarm_message TEXT NOT NULL,
+                alarm_response TEXT NOT NULL,
+                response TEXT NOT NULL
+            )
+        """.trimIndent()
+
+        MyLogger.d("Initialize RESPONSE_TB", sql)
 
         try {
             db.execSQL(sql)

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ant.swcapp.data.Alarm
+import ant.swcapp.data.Response
 import ant.swcapp.utils.Extras
 import kotlinx.android.synthetic.main.activity_alarm_list.*
 
@@ -25,6 +26,10 @@ class AlarmListActivity : AppCompatActivity() {
         btn_add.setOnClickListener {
             val intent = Intent(this@AlarmListActivity, AlarmActivity::class.java)
             startActivity(intent)
+        }
+
+        btn_save.setOnClickListener {
+            Response.saveToFile(this@AlarmListActivity)
         }
     }
 

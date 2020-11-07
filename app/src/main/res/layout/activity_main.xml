@@ -19,6 +19,29 @@
 			android:text="알람 목록"
 			android:layout_marginEnd="20dp"/>
 	</LinearLayout>
+
+	<TableLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TableRow>
+			<TextView
+				android:text="@string/next_alarm" />
+				
+			<TextView
+				android:id="@+id/tv_next_alarm"
+				android:text="" />
+		</TableRow>
+
+		<TableRow>
+			<TextView
+				android:text="@string/next_response" />
+				
+			<TextView
+				android:id="@+id/tv_next_response"
+				android:text="" />
+		</TableRow>
+	</TableLayout>
 	
 	<Space
 		android:layout_width="0dp"
@@ -118,39 +141,39 @@
 		android:layout_height="0dp"
 		android:layout_weight="1"/>
 			
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center" 
-		android:orientation="horizontal">
+<!--	<LinearLayout-->
+<!--		android:layout_width="match_parent"-->
+<!--		android:layout_height="wrap_content"-->
+<!--		android:layout_gravity="center" -->
+<!--		android:orientation="horizontal">-->
 
-		<Space
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:layout_weight="3"/>
+<!--		<Space-->
+<!--			android:layout_width="0dp"-->
+<!--			android:layout_height="0dp"-->
+<!--			android:layout_weight="3"/>-->
 
-		<ImageButton
-			android:id="@+id/recordingButton"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:background="#00000000"
-			app:srcCompat="@drawable/record_button"
-			android:adjustViewBounds="true"
-			android:scaleType="fitCenter" />
-			
-		<Space
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:layout_weight="3"/>
-	</LinearLayout>
-		
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:text="말걸기"
-		android:layout_marginBottom="10dp"/>
+<!--		<ImageButton-->
+<!--			android:id="@+id/recordingButton"-->
+<!--			android:layout_width="0dp"-->
+<!--			android:layout_height="wrap_content"-->
+<!--			android:layout_weight="1"-->
+<!--			android:background="#00000000"-->
+<!--			app:srcCompat="@drawable/record_button"-->
+<!--			android:adjustViewBounds="true"-->
+<!--			android:scaleType="fitCenter" />-->
+<!--			-->
+<!--		<Space-->
+<!--			android:layout_width="0dp"-->
+<!--			android:layout_height="0dp"-->
+<!--			android:layout_weight="3"/>-->
+<!--	</LinearLayout>-->
+<!--		-->
+<!--	<TextView-->
+<!--		android:layout_width="match_parent"-->
+<!--		android:layout_height="wrap_content"-->
+<!--		android:gravity="center"-->
+<!--		android:text="말걸기"-->
+<!--		android:layout_marginBottom="10dp"/>-->
 
 	<LinearLayout
 		android:layout_width="match_parent"
