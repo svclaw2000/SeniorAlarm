@@ -9,7 +9,7 @@
     <string name="save_success">%s에 파일을 저장했습니다.</string>
     <string name="next_alarm">다음 알람 : </string>
     <string name="next_response">다음 응답 : </string>
-    <string name="next_fmt">%02d:%02d - %s</string>
+    <string name="next_fmt">%04d-%02d-%02d %02d:%02d - %s</string>
     <string name="powered_by">powered by 빅데이터공학과 ANT lab.</string>
     <string name="designed_by">designed by freepik.com</string>
 </resources>

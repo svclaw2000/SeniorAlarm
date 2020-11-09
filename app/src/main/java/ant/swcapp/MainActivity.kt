@@ -449,7 +449,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             val alarmTriggerTime = alarm.getNextAlarmTime() ?: return
             tempCalendar.timeInMillis = alarmTriggerTime
-            tv_next_alarm.text = String.format(getString(R.string.next_fmt), tempCalendar[Calendar.HOUR_OF_DAY], tempCalendar[Calendar.MINUTE], alarm.message)
+            tv_next_alarm.text = String.format(getString(R.string.next_fmt), tempCalendar[Calendar.YEAR], tempCalendar[Calendar.MONTH] + 1, tempCalendar[Calendar.DAY_OF_MONTH],
+                tempCalendar[Calendar.HOUR_OF_DAY], tempCalendar[Calendar.MINUTE], alarm.message)
             alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTriggerTime, alarmPendingIntent)
             MyLogger.d("@Alarm@", "${alarmTriggerTime - Date().time}")
         }
@@ -468,7 +469,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             val responseTriggerTime = response.getNextResponseTime() ?: return
             tempCalendar.timeInMillis = responseTriggerTime
-            tv_next_response.text = String.format(getString(R.string.next_fmt), tempCalendar[Calendar.HOUR_OF_DAY], tempCalendar[Calendar.MINUTE], response.response)
+            tv_next_response.text = String.format(getString(R.string.next_fmt), tempCalendar[Calendar.YEAR], tempCalendar[Calendar.MONTH] + 1, tempCalendar[Calendar.DAY_OF_MONTH],
+                tempCalendar[Calendar.HOUR_OF_DAY], tempCalendar[Calendar.MINUTE], response.response)
             alarmManager.set(AlarmManager.RTC_WAKEUP, responseTriggerTime, responsePendingIntent)
             MyLogger.d("@Response@", "${responseTriggerTime - Date().time}")
         }
