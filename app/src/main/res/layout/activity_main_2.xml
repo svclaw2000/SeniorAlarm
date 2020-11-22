@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+	android:gravity="center">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center|end">
+
+		<Button
+			android:id="@+id/btn_alarm_list"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="알람 목록"
+			android:layout_marginEnd="20dp"/>
+	</LinearLayout>
+
+	<TableLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TableRow>
+			<TextView
+				android:text="@string/next_alarm" />
+				
+			<TextView
+				android:id="@+id/tv_next_alarm"
+				android:text="" />
+		</TableRow>
+	</TableLayout>
+	
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<TextView
+		android:id="@+id/btn_record"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:background="@color/recordingOff"
+		android:gravity="center"
+		android:textColor="@color/alarmText"
+		android:textSize="@dimen/main_record_btn_text"
+		android:text="@string/record_start" />
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+	
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textSize="13sp"
+		android:text="@string/powered_by" />
+		
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_marginBottom="20dp"
+		android:textSize="7sp"
+		android:text="@string/designed_by" />
+</LinearLayout>

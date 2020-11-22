@@ -34,18 +34,14 @@ class AlarmActivity : AppCompatActivity() {
 
         tv_time.text = alarm.getTime().getString()
         tv_repeat.text = alarm.repeat.getString()
-        et_title.setText(alarm.title)
         et_message.setText(alarm.message)
-        cb_response.isChecked = alarm.hasResponse
-        et_response.setText(alarm.response)
-        et_response_time.setText(alarm.responseTime.toString())
+        et_repeat_time.setText(alarm.repeatTime.toString())
+        et_repeat_count.setText(alarm.repeatCount.toString())
 
         btn_submit.setOnClickListener {
-            alarm.title = et_title.text.toString()
             alarm.message = et_message.text.toString()
-            alarm.response = et_response.text.toString()
-            alarm.hasResponse = cb_response.isChecked
-            alarm.responseTime = et_response_time.text.toString().toInt()
+            alarm.repeatTime = Integer.parseInt(et_repeat_time.text.toString())
+            alarm.repeatCount = Integer.parseInt(et_repeat_count.text.toString())
 
             if (alarm.id != -1) {
                 alarm.save(this@AlarmActivity)

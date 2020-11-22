@@ -70,18 +70,10 @@
                         android:id="@+id/tv_repeat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="월, 화, 수"
+                        tools:text="월, 화, 수 / 5분 / 3회"
                         android:textSize="@dimen/text_size_item_15sp"/>
                 </LinearLayout>
             </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/cb_response"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="응답"
-                android:textSize="@dimen/text_size_item_15sp"
-                android:enabled="false"/>
         </LinearLayout>
     </LinearLayout>
 

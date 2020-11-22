@@ -70,90 +70,95 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:text="제목 "
-                android:textSize="@dimen/text_size_alarm_message_15sp"
-                android:textColor="@color/alarmText"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="메시지 "
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
-            <EditText
-                android:id="@+id/et_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="알람"
-                android:textSize="@dimen/text_size_alarm_message_15sp"
-                android:textColor="@color/alarmText"/>
-        </TableRow>
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="예) OOO님 약 드실 시간입니다."
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
+    </LinearLayout>
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:text="메시지 "
-                android:textSize="@dimen/text_size_alarm_message_15sp"
-                android:textColor="@color/alarmText"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_message"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="예) OOO님 약 드실 시간입니다."
-                android:textSize="@dimen/text_size_alarm_message_15sp"
-                android:textColor="@color/alarmText"/>
-        </TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="반복 간격 "
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
-        <TableRow>
-            <CheckBox
-                android:id="@+id/cb_response"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:text="응답 "
-                android:textSize="@dimen/text_size_alarm_message_15sp"
-                android:textColor="@color/alarmText"/>
+        <EditText
+            android:id="@+id/et_repeat_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="50dp"
+            android:text="5"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="분"
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
-                <EditText
-                    android:id="@+id/et_response"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="예) OOO님 약 드셨나요?"
-                    android:textSize="@dimen/text_size_alarm_message_15sp"
-                    android:textColor="@color/alarmText"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-                <EditText
-                    android:id="@+id/et_response_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_alarm_message_15sp"
-                    android:textColor="@color/alarmText"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="반복 횟수 "
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="분 후"
-                    android:textSize="@dimen/text_size_alarm_message_15sp"
-                    android:textColor="@color/alarmText"/>
-            </LinearLayout>
+        <EditText
+            android:id="@+id/et_repeat_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="50dp"
+            android:text="3"
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="회"
+            android:textSize="@dimen/text_size_alarm_message_15sp"
+            android:textColor="@color/alarmText"/>
 
-        </TableRow>
-    </TableLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <Space
         android:layout_width="0dp"

@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ant.swcapp.data.Alarm
-import ant.swcapp.data.Response
 import ant.swcapp.utils.Extras
 import kotlinx.android.synthetic.main.activity_alarm_list.*
 
@@ -26,10 +25,6 @@ class AlarmListActivity : AppCompatActivity() {
         btn_add.setOnClickListener {
             val intent = Intent(this@AlarmListActivity, AlarmActivity::class.java)
             startActivity(intent)
-        }
-
-        btn_save.setOnClickListener {
-            Response.saveToFile(this@AlarmListActivity)
         }
     }
 
@@ -54,7 +49,6 @@ class AlarmListActivity : AppCompatActivity() {
             val sw_alarm = itemView.findViewById<Switch>(R.id.sw_alarm)
             val tv_message = itemView.findViewById<TextView>(R.id.tv_message)
             val tv_repeat = itemView.findViewById<TextView>(R.id.tv_repeat)
-            val cb_response = itemView.findViewById<CheckBox>(R.id.cb_response)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -70,9 +64,8 @@ class AlarmListActivity : AppCompatActivity() {
             val alarm = lAlarm[position]
             holder.tv_time.text = alarm.getTime().getString()
             holder.sw_alarm.isChecked = alarm.getIsEnabled()
-            holder.tv_message.text = if (!alarm.title.isBlank()) "${alarm.title} - ${alarm.message}" else alarm.message
-            holder.tv_repeat.text = alarm.repeat.getString()
-            holder.cb_response.isChecked = alarm.hasResponse
+            holder.tv_message.text = alarm.message
+            holder.tv_repeat.text = "${alarm.repeat.getString()} / ${alarm.repeatTime}분 / ${alarm.repeatCount}회"
 
             holder.sw_alarm.setOnCheckedChangeListener { buttonView, isChecked ->
                 alarm.setIsEnabled(isChecked)
@@ -82,7 +75,7 @@ class AlarmListActivity : AppCompatActivity() {
             holder.container.setOnLongClickListener {
                 val items = arrayOf("알람 수정", "알람 삭제")
                 AlertDialog.Builder(this@AlarmListActivity)
-                    .setTitle(alarm.title)
+                    .setTitle(alarm.getTime().getString())
                     .setItems(items) { dialog, which ->
                         when (which) {
                             0 -> {
@@ -93,7 +86,7 @@ class AlarmListActivity : AppCompatActivity() {
                             1 -> {
                                 AlertDialog.Builder(this@AlarmListActivity)
                                     .setTitle("알람 삭제")
-                                    .setMessage("${alarm.title} 알람을 삭제하시겠습니까?")
+                                    .setMessage("${alarm.getTime().getString()}의 알람을 삭제하시겠습니까?")
                                     .setPositiveButton("삭제") { _, _ ->
                                         alarm.delete(this@AlarmListActivity)
                                         refresh()

@@ -12,4 +12,7 @@
     <string name="next_fmt">%04d-%02d-%02d %02d:%02d - %s</string>
     <string name="powered_by">powered by 빅데이터공학과 ANT lab.</string>
     <string name="designed_by">designed by freepik.com</string>
+
+    <string name="record_start">녹음 시작</string>
+    <string name="record_end">녹음 종료</string>
 </resources>

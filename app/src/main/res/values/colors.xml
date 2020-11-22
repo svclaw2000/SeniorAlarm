@@ -7,4 +7,7 @@
     <color name="titleBarText">#000000</color>
     <color name="alarmText">#000000</color>
     <color name="splitLine">#393939</color>
+
+    <color name="recordingOn">#FFBBBB</color>
+    <color name="recordingOff">#D8FFCD</color>
 </resources>
